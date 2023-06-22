@@ -1,12 +1,16 @@
+from unittest import mock
+
 from dependency_injector import containers, providers
-from dependency_injection.wire import inject, Provide
+from dependency_injector.wiring import inject, Provide
+
+from main import ApiClient, Service
 
 class Container(containers.DeclarativeContainer):
     
     config = providers.Configuration()
     
     api_client = providers.Singleton(
-        AppClient,
+        ApiClient,
         api_key = config.api_key,
         timeout = config.timeout
     )
