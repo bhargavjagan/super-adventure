@@ -22,13 +22,12 @@ Follow up:
 - A simple improvement uses O(m + n) space, but still not the best solution.
 - Could you devise a constant space solution? 
 """
+from types import ClassMethodDescriptorType
 from typing import List
 import time
-from utils import profile
 
 class Solution:
 
-    @profile
     @classmethod
     def bruteForce(cls, matrix: List[List[int]]) -> List[List[int]]:
         """
@@ -52,7 +51,63 @@ class Solution:
         
         return matrix
 
-    @profile
+    @classmethod
+    def betterSolution(cls, matrix:List[List[int]]) -> List[List[int]]:
+        m = len(matrix[0])
+        n = len(matrix)
+        column_flag = [0] * m
+        rows_flag = [0] * n
+
+        for i in range(n):
+            for j in range(m):
+                if matrix[i][j] == 0:
+                    column_flag[j] = 1
+                    rows_flag[i] = 1
+
+        for i in range(n):
+            for j in range(m):
+                if rows_flag[i] or column_flag[j]:
+                    matrix[i][j] = 0
+
+        return matrix
+    
+    @classmethod
+    def optimal_solution(cls, matrix: List[List[int]]) -> List[List[int]]:
+        n = len(matrix) #rows
+        m = len(matrix[0]) # columns
+        col0 = 1
+
+        # traverse and mark all of the zeros
+        for i in range(n):
+            for j in range(m):
+                if matrix[i][j] == 0:
+                    #mark the row
+                    matrix[i][0] = 0
+
+                    #mark the column
+                    if j != 0: 
+                        matrix[0][j] = 0
+                    else:
+                        col0 = 0
+        
+        # traverse from the bottom and make them zeros
+        for i in range(1, n):
+            for j in range(1, m):
+                if matrix[i][j] != 0:
+                    if matrix[0][j] or matrix[i][0]:
+                        matrix[i][j] = 0
+    
+        # check for the edge cases
+        if matrix[0][0] == 0:
+            matrix[0] = [0 for _ in range(m)]
+
+        if col0 == 0:
+            for i in range(n):
+                matrix[i][0] = 0
+
+        return matrix
+
+
     def setZeroes(self, matrix: List[List[int]]) -> None:
         """
         Do not return anything, modify matrix in-place instead.
