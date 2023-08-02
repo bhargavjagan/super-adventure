@@ -94,7 +94,7 @@ class Solution:
         for i in range(1, n):
             for j in range(1, m):
                 if matrix[i][j] != 0:
-                    if matrix[0][j] or matrix[i][0]:
+                    if matrix[0][j] == 0 or matrix[i][0] == 0:
                         matrix[i][j] = 0
     
         # check for the edge cases
