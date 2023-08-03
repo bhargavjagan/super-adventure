@@ -2,6 +2,10 @@
 Source: https://pymbook.readthedocs.io/en/latest/igd.html
 """
 # Iterator is an object that implement __iter__ and __next__
+from textwrap import wrap
+from unittest import result
+
+
 class Counter(object):
     def __init__(self, low, high) -> None:
         self.current = low
@@ -57,3 +61,40 @@ class Counter:
         while self.high>= counter:
             yield counter
             counter += 1
+
+# generator expression
+g = (x*x for x in range(1, 10)) # -> returns generator
+next_element = next(g) # -> gives next element
+g = sum(g)
+
+# similar
+g = sum([x*x for x in range(10)]) # takes much space
+
+
+# Closures - they are nothing but function that are returned by another function
+
+def add_number(num: int):
+    def adder(number):
+        'adder is a closure'
+        return num + number
+    return adder
+
+a_10 = add_number(10)
+a_10(21)
+# 31
+a_10(11)
+# 42
+
+# Decorators - it is a way to dynamically add some new behaviour to some object
+
+def my_decorator(func):
+    def wrapper(*args, **kwargs):
+        print('Before call')
+        result= func(*args, **kwargs)
+        print('After call')
+        return result
+    return wrapper
+
+@my_decorator
+def add(a,b):
+    return a+b
